@@ -3,44 +3,72 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SMAD 1.1 S | 基本資料收集</title>
+    <title>SMAD 1.1 S | 雲端存檔</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
     <style>
-        :root { --cbe-primary: #1a2a6c; --cbe-accent: #d4a017; }
-        body { background-color: #f8f9fa; font-family: "Microsoft JhengHei", sans-serif; padding-bottom: 50px; }
+        :root { --cbe-primary: #1a2a6c; }
+        body { background-color: #f8f9fa; font-family: "Microsoft JhengHei", sans-serif; }
         .container { max-width: 500px; margin-top: 20px; }
-        .step-title { color: var(--cbe-primary); font-weight: bold; border-left: 5px solid var(--cbe-accent); padding-left: 12px; margin: 25px 0 12px 0; }
-        .card { border: none; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.08); }
-        .btn-finish { background: linear-gradient(135deg, #28a745, #1e7e34); color: white; border: none; padding: 16px; border-radius: 12px; font-weight: bold; width: 100%; margin-top: 30px; }
+        .btn-cloud { background: linear-gradient(135deg, #28a745, #1e7e34); color: white; border: none; padding: 18px; border-radius: 15px; font-weight: bold; width: 100%; box-shadow: 0 4px 15px rgba(40,167,69,0.3); }
     </style>
 </head>
 <body>
-    <nav class="navbar navbar-dark" style="background-color: #28a745;"><div class="container-fluid"><span class="navbar-brand mb-0 h1" onclick="history.back()"><i class="bi bi-chevron-left"></i> SMAD 1.1 S | 資料收集</span></div></nav>
+    <nav class="navbar navbar-dark" style="background-color: #28a745;"><div class="container-fluid"><span class="navbar-brand mb-0 h1">最終資料存檔</span></div></nav>
     <div class="container">
-        <div class="card p-4">
-            <div class="step-title">1. 空間幾何 (Geometry)</div>
-            <div class="input-group mb-2"><span class="input-group-text">長</span><input type="number" id="l" class="form-control" placeholder="m"></div>
-            <div class="input-group mb-2"><span class="input-group-text">寬</span><input type="number" id="w" class="form-control" placeholder="m"></div>
-            <div class="input-group mb-3"><span class="input-group-text">高</span><input type="number" id="h" class="form-control" placeholder="m"></div>
-            
-            <div class="step-title">2. 開口與設備</div>
-            <label class="small">窗戶數量</label><input type="number" id="win" class="form-control mb-2" value="0">
-            <div class="form-check form-switch mt-3"><input class="form-check-input" type="checkbox" id="pc"><label class="form-check-label">包含電腦熱源</label></div>
-            
-            <button type="button" class="btn btn-finish" onclick="downloadData()">完成並導出 JSON 資料</button>
+        <div class="card p-4 shadow-sm" style="border-radius: 20px; border:none;">
+            <div class="alert alert-info small">點擊下方按鈕將所有診斷資料上傳至 CBE studio 雲端資料庫。</div>
+            <button type="button" id="uploadBtn" class="btn btn-cloud" onclick="uploadToCloud()">
+                <span id="btnText">確認並上傳雲端資料庫</span>
+                <span id="btnLoading" class="spinner-border spinner-border-sm d-none"></span>
+            </button>
+            <div class="text-center mt-4"><a href="https://www.cbesstudio.com/" target="_blank" style="text-decoration:none; color:#1a2a6c; font-weight:bold;">CBE studio 研究室網址</a></div>
         </div>
     </div>
     <script>
-        function downloadData() {
-            const role = new URLSearchParams(window.location.search).get('role');
-            const data = { role, geometry: { l: document.getElementById('l').value, w: document.getElementById('w').value, h: document.getElementById('h').value }, windows: document.getElementById('win').value, has_pc: document.getElementById('pc').checked, timestamp: new Date().toLocaleString() };
-            const blob = new Blob([JSON.stringify(data, null, 2)], { type: "application/json" });
-            const a = document.createElement("a");
-            a.href = URL.createObjectURL(blob);
-            a.download = `SMAD_Report_${Date.now()}.json`;
-            a.click();
-            alert('數據導出成功！');
+        async function uploadToCloud() {
+            const btnText = document.getElementById('btnText');
+            const btnLoading = document.getElementById('btnLoading');
+            const uploadBtn = document.getElementById('uploadBtn');
+
+            // 1. 從網址抓取前兩頁的所有資料
+            const params = new URLSearchParams(window.location.search);
+            const data = {
+                developer: "Liwei, Tsai",
+                role: params.get('role'),
+                scale: params.get('scale'),
+                location: params.get('loc'),
+                env_type: params.get('env'),
+                source_desc: params.get('source'),
+                timestamp: new Date().toLocaleString()
+            };
+
+            // 2. 您的 Google Script 網址
+            const scriptURL = "https://script.google.com/macros/s/AKfycby6mXjlzdTxvohlSHCpoQMTUAji7snrTykZE2gl7xt0qgHB0G9hvlLVE4xJvZT3z7IS/exec";
+
+            // UI 狀態切換
+            btnText.innerText = "上傳中...";
+            btnLoading.classList.remove('d-none');
+            uploadBtn.disabled = true;
+
+            try {
+                // 使用 fetch 發送到 Google Sheets
+                await fetch(scriptURL, {
+                    method: 'POST',
+                    mode: 'no-cors', // 必須使用 no-cors 模式
+                    body: JSON.stringify(data),
+                    headers: { 'Content-Type': 'application/json' }
+                });
+                
+                alert('🎉 存檔成功！資料已飛進您的 Google 試算表。');
+                btnText.innerText = "上傳成功！";
+                btnLoading.classList.add('d-none');
+            } catch (error) {
+                console.error('Error!', error.message);
+                alert('存檔失敗，請檢查網路。');
+                btnText.innerText = "重新嘗試上傳";
+                btnLoading.classList.add('d-none');
+                uploadBtn.disabled = false;
+            }
         }
     </script>
 </body>
