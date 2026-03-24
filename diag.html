@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SMAD 1.1 需求診斷與目的確認</title>
+    <title>SMAD 1.1 S | 需求診斷與目的確認</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
     <style>
@@ -18,7 +18,9 @@
         .btn-submit { 
             background: var(--cbe-primary); color: white; border: none; padding: 16px; 
             border-radius: 12px; font-weight: bold; width: 100%; margin-top: 30px; 
+            transition: 0.3s;
         }
+        .btn-submit:hover { background: #0d1740; transform: translateY(-2px); }
         .suggestion-box {
             background-color: #fff9db; border: 1px solid #ffec99; border-radius: 12px;
             padding: 15px; margin-bottom: 20px; font-size: 0.9rem; color: #664d03;
@@ -37,38 +39,37 @@
 
     <div class="container">
         <div class="card p-4">
-            <div id="roleSuggestion" class="suggestion-box"></div>
+            <div id="roleSuggestion" class="suggestion-box">
+                <i class="bi bi-lightbulb-fill"></i> 正在根據您的身份載入建議...
+            </div>
 
             <form id="diagForm">
                 <div class="step-title"><i class="bi bi-geo-alt-fill"></i> Where－空間與尺度</div>
                 <select class="form-select mb-2" id="scale">
-                    <option value="urban">都市尺度 (Urban)</option>
-                    <option value="building">建築尺度 (Building)</option>
-                    <option value="interior" selected>室內尺度 (Interior)</option>
+                    <option value="urban">都市尺度 (Urban Scale)</option>
+                    <option value="building">建築尺度 (Building Scale)</option>
+                    <option value="interior" selected>室內尺度 (Interior Scale)</option>
                 </select>
                 <input type="text" class="form-control" id="location" placeholder="輸入具體空間名稱 (如：公設大廳)">
 
-                <div class="step-title"><i class="bi bi-search"></i> What－問題感知 (Situation)</div>
-                <div class="mb-3">
-                    <div class="form-check form-check-inline">
+                <div class="step-title"><i class="bi bi-search"></i> What－環境類型感知 (Situation)</div>
+                <div class="p-3 border rounded bg-light">
+                    <div class="form-check mb-2">
                         <input class="form-check-input" type="radio" name="env_type" id="e1" value="wind">
-                        <label class="form-check-label" for="e1">風環境</label>
+                        <label class="form-check-label" for="e1">風環境 (Wind Environment)</label>
                     </div>
-                    <div class="form-check form-check-inline">
+                    <div class="form-check mb-2">
                         <input class="form-check-input" type="radio" name="env_type" id="e2" value="thermal">
-                        <label class="form-check-label" for="e2">熱環境</label>
+                        <label class="form-check-label" for="e2">熱環境 (Thermal Environment)</label>
                     </div>
-                    <div class="form-check form-check-inline">
+                    <div class="form-check">
                         <input class="form-check-input" type="radio" name="env_type" id="e3" value="coupled" checked>
-                        <label class="form-check-label" for="e3">耦合分析</label>
+                        <label class="form-check-label" for="e3">風環境與熱環境 (Coupled Analysis)</label>
                     </div>
                 </div>
-                <div class="form-check"><input class="form-check-input" type="checkbox" id="w1"><label class="form-check-label">熱累積 / 局部悶熱</label></div>
-                <div class="form-check"><input class="form-check-input" type="checkbox" id="w2"><label class="form-check-label">風切現象 / 局部強風</label></div>
-                <div class="form-check mb-3"><input class="form-check-input" type="checkbox" id="w3"><label class="form-check-label">氣流死角 / 換氣不足</label></div>
 
-                <div class="step-title"><i class="bi bi-target"></i> 模擬目的確認 (Simulation Purpose)</div>
-                <p class="small text-muted mb-2">請根據需求選擇模擬的核心目標：</p>
+                <div class="step-title"><i class="bi bi-target"></i> 模擬目的確認 (Purpose)</div>
+                <p class="small text-muted mb-2">請選擇模擬的核心目標：</p>
                 <div class="form-check mb-2">
                     <input class="form-check-input" type="checkbox" id="p1" checked>
                     <label class="form-check-label" for="p1">驗證設計方案有效性 <span class="purpose-tag">Validation</span></label>
@@ -87,39 +88,45 @@
                 </div>
 
                 <div class="step-title"><i class="bi bi-chat-left-dots-fill"></i> How－問題來源 (Source)</div>
-                <textarea class="form-control" id="how" rows="3" placeholder="請簡述使用行為或物理熱源狀況..."></textarea>
+                <textarea class="form-control" id="how" rows="3" placeholder="請簡述使用行為、設備熱源或通風現況..."></textarea>
 
-                <button type="button" class="btn btn-submit" onclick="submitDiagnostic()">完成診斷並生成報告</button>
+                <button type="button" class="btn btn-submit" onclick="submitDiagnostic()">下一步：收集基本資料</button>
             </form>
         </div>
 
         <div class="footer-info text-center mt-4 small text-muted">
             Developer: CBE studio | Liwei, Tsai<br>
             <a href="https://www.cbesstudio.com/" target="_blank" style="color:var(--cbe-primary); text-decoration:none;">研究室官網</a><br>
-            逢甲大學 建築專業學院 博士班成果
+            逢甲大學 建築專業學院 博士班研究成果
         </div>
     </div>
 
     <script>
+        // 1. 抓取網址參數 (Role)
         const params = new URLSearchParams(window.location.search);
-        const role = params.get('role');
+        const role = params.get('role') || 'general_user';
         const suggestionBox = document.getElementById('roleSuggestion');
 
+        // 2. 針對不同單位顯示建議
         const suggestions = {
-            'architect': '<b>【設計師建議】</b><br>模擬應著重於量體對風場的引導，建議以 Validation 為主。',
-            'interior_designer': '<b>【室內設計建議】</b><br>關注細部隔間與通風路徑，建議進行 Coupled 耦合分析。',
-            'urban_planner': '<b>【都市計畫建議】</b><br>應考量大尺度風速分佈，目標建議包含 Certification 數據需求。',
-            'developer': '<b>【建設端建議】</b><br>模擬結果可用於增加設計附加價值與舒適度認證。',
-            'construction': '<b>【營造端建議】</b><br>建議進行 Diagnosis 診斷，釐清現場條件與原始設計之差異。',
-            'interior_fitout': '<b>【裝修端建議】</b><br>應記錄二次裝修對原本換氣路徑的影響，進行 Source 釐清。',
-            'management': '<b>【管理端建議】</b><br>重點在於節能與長期運維，模擬目的建議選擇 Optimization。',
-            'general_user': '<b>【使用者建議】</b><br>您的感受是模擬最真實的基礎數據，請詳細描述悶熱或吹風感。'
+            'architect': '<b>【設計規劃端建議】</b><br>模擬應著重於量體對風場的引導作用，建議以 Validation 為主。',
+            'interior_designer': '<b>【設計規劃端建議】</b><br>關注細部隔間對通風路徑的阻擋，建議進行 Coupled 耦合分析。',
+            'urban_planner': '<b>【設計規劃端建議】</b><br>應考量大尺度建築群的風洞效應，目標建議包含 Certification 數據。',
+            'developer': '<b>【營建管理端建議】</b><br>模擬結果可用於評估公設空間舒適度，作為建案銷售價值之依據。',
+            'construction': '<b>【營建管理端建議】</b><br>建議進行 Diagnosis 診斷，釐清現場施工條件與原始設計之差異。',
+            'interior_fitout': '<b>【營建管理端建議】</b><br>應記錄二次裝修對原本換氣路徑的影響，進行 Source 釐清。',
+            'management': '<b>【營建管理端建議】</b><br>重點在於節能與長期運維，模擬目的建議選擇 Optimization。',
+            'general_user': '<b>【一般使用者建議】</b><br>您的感知是模擬最真實的基礎數據，請詳細描述空間使用狀況。'
         };
+        suggestionBox.innerHTML = suggestions[role] || '<b>【SMAD 提醒】</b><br>請完成現況診斷，以進入 Step 1.2 設定邊界條件。';
 
-        suggestionBox.innerHTML = suggestions[role] || '<b>【SMAD 提醒】</b><br>請完成 Step 1.1 的現況診斷，以利進入 Step 1.2 設定邊界條件。';
-
+        // 3. 提交並跳轉至第三頁
         function submitDiagnostic() {
-            alert('【SMAD 1.1 S 診斷完成】\n目的確認：已記錄模擬目標。\n開發者：Liwei, Tsai\n\n系統將以此作為 Step 1.2 網格精細度與物理模型設定之依據。');
+            // 彈出成功提示
+            alert('【SMAD 1.1 S 診斷完成】\n目的確認：已記錄模擬目標。\n\n按確定後將進入「基本資料收集」頁面。');
+            
+            // 跳轉至 data.html，並將身份參數帶過去
+            window.location.href = `data.html?role=${role}`;
         }
     </script>
 </body>
