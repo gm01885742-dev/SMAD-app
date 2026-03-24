@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CBE studio | SMAD 1.1 S 入口診斷</title>
+    <title>CBE studio | SMAD 1.1 S</title>
     <link rel="manifest" href="manifest.json">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
@@ -11,74 +11,53 @@
         :root { --cbe-primary: #1a2a6c; --cbe-accent: #d4a017; }
         body { background-color: #f8f9fa; font-family: "Microsoft JhengHei", sans-serif; padding-bottom: 50px; }
         .container { max-width: 500px; margin-top: 20px; }
-        .cbe-brand-header {
-            background: linear-gradient(135deg, var(--cbe-primary), #2a4858);
-            color: white; padding: 25px 20px; border-radius: 20px 20px 0 0; text-align: center;
-        }
+        .cbe-brand-header { background: linear-gradient(135deg, var(--cbe-primary), #2a4858); color: white; padding: 25px 20px; border-radius: 20px 20px 0 0; text-align: center; }
         .card { border: none; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); }
         .step-title { color: var(--cbe-primary); font-weight: bold; border-left: 5px solid var(--cbe-accent); padding-left: 12px; margin: 20px 0 10px 0; font-size: 1.05rem; }
-        .btn-next { background: var(--cbe-primary); color: white; border: none; padding: 16px; border-radius: 12px; font-weight: bold; width: 100%; margin-top: 25px; transition: 0.3s; }
-        .btn-next:hover { background: #0d1740; transform: translateY(-2px); }
-        .footer-info { text-align: center; margin-top: 25px; color: #6c757d; font-size: 0.85rem; line-height: 1.6; }
-        .developer-tag { color: var(--cbe-primary); font-weight: bold; }
+        .btn-next { background: var(--cbe-primary); color: white; border: none; padding: 16px; border-radius: 12px; font-weight: bold; width: 100%; margin-top: 25px; }
+        .footer-info { text-align: center; margin-top: 25px; color: #6c757d; font-size: 0.85rem; }
     </style>
 </head>
 <body>
     <div class="container">
         <div class="card shadow">
-            <div class="cbe-brand-header">
-                <div class="h4 fw-bold mb-0">CBE studio</div>
-                <div class="small opacity-75">SMAD 1.1 S｜Situation Diagnosis</div>
-            </div>
+            <div class="cbe-brand-header"><div class="h4 fw-bold mb-0">CBE studio</div><div class="small opacity-75">SMAD 1.1 S｜數位診斷系統</div></div>
             <div class="card-body p-4">
                 <form id="entryForm">
-                    <div class="step-title"><i class="bi bi-person-check-fill"></i> Who－使用者對象</div>
+                    <div class="step-title">Who－使用者對象</div>
                     <select class="form-select mb-3" id="userRole">
-                        <option value="architect">建築師</option>
-                        <option value="interior_designer">室內設計師</option>
-                        <option value="interior_fitout">室內裝修業者</option>
-                        <option value="management">營建管理單位</option>
-                        <option value="general_user">一般使用者</option>
+                        <option value="建築師">建築師</option>
+                        <option value="室內設計師">室內設計師</option>
+                        <option value="室內裝修業者">室內裝修業者</option>
+                        <option value="管理單位">管理單位</option>
+                        <option value="一般使用者">一般使用者</option>
                     </select>
-
-                    <div class="step-title"><i class="bi bi-geo-alt-fill"></i> Where－空間與尺度</div>
+                    <div class="step-title">Where－空間與尺度</div>
                     <select class="form-select mb-2" id="scale">
-                        <option value="urban">都市尺度 (Urban Scale)</option>
-                        <option value="building">建築尺度 (Building Scale)</option>
-                        <option value="interior" selected>室內尺度 (Interior Scale)</option>
+                        <option value="都市尺度">都市尺度</option>
+                        <option value="建築尺度">建築尺度</option>
+                        <option value="室內尺度" selected>室內尺度</option>
                     </select>
-                    <input type="text" class="form-control mb-3" id="location" placeholder="輸入具體空間名稱 (如：地下室車庫)">
-
-                    <div class="step-title"><i class="bi bi-search"></i> What－環境類型感知</div>
+                    <input type="text" class="form-control mb-3" id="location" placeholder="輸入空間名稱 (如：地下室車庫)">
+                    <div class="step-title">What－環境類型</div>
                     <div class="p-3 border rounded bg-light">
-                        <div class="form-check mb-2">
-                            <input class="form-check-input" type="radio" name="env_type" id="e1" value="wind" checked>
-                            <label class="form-check-label" for="e1">風環境 (Wind)</label>
-                        </div>
-                        <div class="form-check">
-                            <input class="form-check-input" type="radio" name="env_type" id="e2" value="thermal">
-                            <label class="form-check-label" for="e2">熱環境 (Thermal)</label>
-                        </div>
+                        <div class="form-check mb-2"><input class="form-check-input" type="radio" name="env_type" id="e1" value="風環境" checked><label class="form-check-label" for="e1">風環境 (Wind)</label></div>
+                        <div class="form-check"><input class="form-check-input" type="radio" name="env_type" id="e2" value="熱環境"><label class="form-check-label" for="e2">熱環境 (Thermal)</label></div>
                     </div>
-
-                    <button type="button" class="btn btn-next" onclick="goToNextPage()">
-                        下一階段：問題來源整理 <i class="bi bi-arrow-right-short"></i>
-                    </button>
+                    <button type="button" class="btn btn-next" onclick="goToNextPage()">下一步：問題來源整理</button>
                 </form>
             </div>
         </div>
-
-        <div class="footer-info">
-            <div class="developer-tag">Developer: CBE studio | Liwei, Tsai</div>
-            © 2026 CBE STUDIO | <a href="https://www.cbesstudio.com/" target="_blank" style="color:var(--cbe-primary); text-decoration:none; font-weight:bold;">研究室網址</a><br>
-            <small>逢甲大學 建築專業學院 博士班研究成果</small>
-        </div>
+        <div class="footer-info">Developer: CBE studio | Liwei, Tsai</div>
     </div>
-
     <script>
         function goToNextPage() {
             const role = document.getElementById('userRole').value;
-            window.location.href = `diag.html?role=${role}`;
+            const scale = document.getElementById('scale').value;
+            const loc = document.getElementById('location').value || "未命名空間";
+            const env = document.querySelector('input[name="env_type"]:checked').value;
+            // 將所有資訊編碼傳往第二頁
+            window.location.href = `diag.html?role=${encodeURIComponent(role)}&scale=${encodeURIComponent(scale)}&loc=${encodeURIComponent(loc)}&env=${encodeURIComponent(env)}`;
         }
         if ('serviceWorker' in navigator) { navigator.serviceWorker.register('sw.js'); }
     </script>
