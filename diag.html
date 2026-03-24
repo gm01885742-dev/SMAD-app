@@ -3,78 +3,34 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SMAD 1.1 S | Step 1.2 問題來源整理</title>
+    <title>SMAD 1.1 S | Step 1.2</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
     <style>
         :root { --cbe-primary: #1a2a6c; --cbe-accent: #d4a017; }
         body { background-color: #f8f9fa; font-family: "Microsoft JhengHei", sans-serif; padding-bottom: 50px; }
         .container { max-width: 500px; margin-top: 20px; }
         .step-title { color: var(--cbe-primary); font-weight: bold; border-left: 5px solid var(--cbe-accent); padding-left: 12px; margin: 25px 0 12px 0; }
-        .card { border: none; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.08); }
-        .suggestion-box { background-color: #fff9db; border: 1px solid #ffec99; border-radius: 12px; padding: 15px; margin-bottom: 20px; font-size: 0.9rem; color: #664d03; }
-        .form-label { font-weight: bold; color: #495057; font-size: 0.9rem; margin-top: 12px; }
-        .btn-submit { background: var(--cbe-primary); color: white; border: none; padding: 16px; border-radius: 12px; font-weight: bold; width: 100%; margin-top: 30px; }
-        .footer-link { text-align: center; margin-top: 30px; }
-        .footer-link a { color: var(--cbe-primary); text-decoration: none; font-weight: bold; font-size: 0.9rem; }
+        .btn-submit { background: var(--cbe-primary); color: white; border: none; padding: 16px; border-radius: 12px; width: 100%; margin-top: 30px; }
     </style>
 </head>
 <body>
-    <nav class="navbar navbar-dark" style="background-color: var(--cbe-primary);">
-        <div class="container-fluid"><span class="navbar-brand mb-0 h1" onclick="history.back()"><i class="bi bi-chevron-left"></i> Step 1.2 問題來源整理</span></div>
-    </nav>
-
+    <nav class="navbar navbar-dark" style="background-color: var(--cbe-primary);"><div class="container-fluid"><span class="navbar-brand mb-0 h1">Step 1.2 問題來源整理</span></div></nav>
     <div class="container">
-        <div class="card p-4">
-            <div id="roleSuggestion" class="suggestion-box"></div>
-            <form id="sourceForm">
-                <div class="step-title"><i class="bi bi-list-check"></i> 診斷詳細欄位</div>
-
-                <label class="form-label">1. 誰提出這個問題？</label>
-                <input type="text" id="q1" class="form-control" placeholder="如：業主、住戶、設計師">
-
-                <label class="form-label">2. 問題發生在哪裡？</label>
-                <input type="text" id="q2" class="form-control" placeholder="如：客廳、建築物西北側">
-
-                <label class="form-label">3. 問題類別</label>
-                <select class="form-select" id="q3">
-                    <option value="wind">風環境</option>
-                    <option value="thermal">熱環境</option>
-                    <option value="comfort">舒適度</option>
-                    <option value="air">空氣品質</option>
-                </select>
-
-                <label class="form-label">4. 什麼時候發生？</label>
-                <input type="text" id="q4" class="form-control" placeholder="如：下午兩點、夏季午後">
-
-                <label class="form-label">5. 發生頻率</label>
-                <select class="form-select" id="q5">
-                    <option value="high">頻繁發生</option>
-                    <option value="medium">偶爾發生</option>
-                    <option value="low">季節性發生</option>
-                </select>
-
-                <label class="form-label">6. 是否已有圖面或照片？</label>
-                <div class="d-flex gap-3">
-                    <div class="form-check"><input class="form-check-input" type="radio" name="q6" id="y" value="yes"><label class="form-check-label" for="y">有</label></div>
-                    <div class="form-check"><input class="form-check-input" type="radio" name="q6" id="n" value="no" checked><label class="form-check-label" for="n">無</label></div>
-                </div>
-
-                <button type="button" class="btn btn-submit" onclick="goToDataPage()">進入空間資料收集 <i class="bi bi-arrow-right"></i></button>
-            </form>
+        <div class="card p-4 shadow-sm" style="border-radius: 20px; border:none;">
+            <div class="step-title">問題來源描述 (Source)</div>
+            <p class="small text-muted">請詳細描述該空間發生的環境問題：</p>
+            <textarea class="form-control" id="sourceDesc" rows="6" placeholder="例如：夏季午後西曬嚴重、窗戶開啟率低..."></textarea>
+            <button type="button" class="btn btn-submit" onclick="goToDataPage()">進入空間資料收集</button>
         </div>
-        <div class="footer-link"><a href="https://www.cbesstudio.com/" target="_blank">CBE studio 研究室網址</a></div>
     </div>
-
     <script>
-        const params = new URLSearchParams(window.location.search);
-        const role = params.get('role') || 'general_user';
-        const suggestions = {
-            'architect': '<b>【建築師建議】</b><br>請著重於外部量體對風場的影響。',
-            'interior_designer': '<b>【設計師建議】</b><br>請關注隔間對通風路徑的阻斷。'
-        };
-        document.getElementById('roleSuggestion').innerHTML = suggestions[role] || '<b>【SMAD 提醒】</b>請完整紀錄來源資訊以利分析。';
-        function goToDataPage() { window.location.href = `data.html?role=${role}`; }
+        function goToDataPage() {
+            const currentURL = new URLSearchParams(window.location.search);
+            const source = document.getElementById('sourceDesc').value || "無描述";
+            // 附加第二頁的描述，傳給第三頁
+            currentURL.append('source', source);
+            window.location.href = `data.html?` + currentURL.toString();
+        }
     </script>
 </body>
 </html>
