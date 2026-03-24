@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SMAD 1.1 S | 基本資料收集</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+    <style>
+        :root { --cbe-primary: #1a2a6c; --cbe-accent: #d4a017; }
+        body { background-color: #f8f9fa; font-family: "Microsoft JhengHei", sans-serif; }
+        .container { max-width: 500px; margin-top: 20px; padding-bottom: 50px; }
+        .step-title { 
+            color: var(--cbe-primary); font-weight: bold; border-left: 5px solid var(--cbe-accent); 
+            padding-left: 12px; margin: 25px 0 12px 0; font-size: 1.1rem;
+        }
+        .card { border: none; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.08); }
+        .input-group-text { background-color: #e9ecef; color: var(--cbe-primary); font-weight: bold; }
+        .btn-finish { 
+            background: linear-gradient(135deg, #28a745, #1e7e34); color: white; border: none; 
+            padding: 16px; border-radius: 12px; font-weight: bold; width: 100%; margin-top: 30px; 
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-dark" style="background-color: #28a745;">
+        <div class="container-fluid">
+            <span class="navbar-brand mb-0 h1" onclick="history.back()">
+                <i class="bi bi-chevron-left"></i> SMAD 1.1 S | 基本資料
+            </span>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="card p-4">
+            <div class="alert alert-success small mb-4">
+                <i class="bi bi-info-circle-fill"></i> 診斷完成！請補充空間物理參數以利建模。
+            </div>
+
+            <form id="dataForm">
+                <div class="step-title"><i class="bi bi-box-seam"></i> 1. 空間幾何資訊 (Geometry)</div>
+                <div class="input-group mb-2">
+                    <span class="input-group-text">長</span>
+                    <input type="number" class="form-control" placeholder="公尺">
+                    <span class="input-group-text">寬</span>
+                    <input type="number" class="form-control" placeholder="公尺">
+                </div>
+                <div class="input-group mb-3">
+                    <span class="input-group-text">淨高</span>
+                    <input type="number" class="form-control" placeholder="公尺">
+                </div>
+
+                <div class="step-title"><i class="bi bi-door-open"></i> 2. 開口配置 (Openings)</div>
+                <div class="row g-2">
+                    <div class="col-6">
+                        <label class="form-label small">窗戶數量</label>
+                        <input type="number" class="form-control" value="0">
+                    </div>
+                    <div class="col-6">
+                        <label class="form-label small">門扇數量</label>
+                        <input type="number" class="form-control" value="0">
+                    </div>
+                </div>
+
+                <div class="step-title"><i class="bi bi-thermometer-sun"></i> 3. 內部熱源預估 (Heat Sources)</div>
+                <div class="mb-2">
+                    <label class="form-label small">常駐人數</label>
+                    <input type="number" class="form-control" placeholder="人">
+                </div>
+                <div class="form-check form-switch mb-2">
+                    <input class="form-check-input" type="checkbox" id="has_pc">
+                    <label class="form-check-label" for="has_pc">包含電腦/伺服器設備</label>
+                </div>
+                <div class="form-check form-switch mb-2">
+                    <input class="form-check-input" type="checkbox" id="has_ac">
+                    <label class="form-check-label" for="has_ac">包含空調/機械排風</label>
+                </div>
+
+                <div class="step-title"><i class="bi bi-camera"></i> 4. 現場紀錄 (Site Records)</div>
+                <div class="mb-3">
+                    <input class="form-control form-control-sm" type="file" id="site_img" multiple>
+                    <p class="text-muted" style="font-size: 0.75rem; margin-top: 5px;">
+                        上傳現場照片有助於更精確的邊界條件判斷。
+                    </p>
+                </div>
+
+                <button type="button" class="btn btn-finish" onclick="finishAll()">完成所有資料收集</button>
+            </form>
+        </div>
+
+        <div class="footer-info text-center mt-4 small text-muted">
+            Developer: CBE studio | Liwei, Tsai<br>
+            <a href="https://www.cbesstudio.com/" target="_blank" style="color:var(--cbe-primary); text-decoration:none;">研究室官網</a>
+        </div>
+    </div>
+
+    <script>
+        function finishAll() {
+            alert('【SMAD 1.1 S 資料收集完成】\n所有參數已成功導出。\n\n接下來請依據此參數進入 Step 1.2：\n網格劃分 (Meshing) 與 邊界設定 (Boundary Settings)。');
+        }
+    </script>
+</body>
+</html>
