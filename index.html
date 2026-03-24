@@ -3,121 +3,67 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SMAD 1.1 需求診斷與目的確認</title>
+    <title>CBE studio | SMAD 1.1 入口</title>
+    <link rel="manifest" href="manifest.json">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
     <style>
         :root { --cbe-primary: #1a2a6c; --cbe-accent: #d4a017; }
-        body { background-color: #f8f9fa; font-family: "Microsoft JhengHei", sans-serif; }
-        .container { max-width: 500px; margin-top: 20px; padding-bottom: 50px; }
-        .step-title { 
-            color: var(--cbe-primary); font-weight: bold; border-left: 5px solid var(--cbe-accent); 
-            padding-left: 12px; margin: 25px 0 12px 0; font-size: 1.1rem;
+        body { background-color: #f8f9fa; font-family: "Microsoft JhengHei", sans-serif; display: flex; align-items: center; min-height: 100vh; margin: 0; }
+        .container { max-width: 450px; padding: 20px; }
+        .cbe-brand-header {
+            background: linear-gradient(135deg, var(--cbe-primary), #2a4858);
+            color: white; padding: 30px 20px; border-radius: 20px 20px 0 0; text-align: center;
         }
-        .card { border: none; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.08); }
-        .btn-submit { 
-            background: var(--cbe-primary); color: white; border: none; padding: 16px; 
-            border-radius: 12px; font-weight: bold; width: 100%; margin-top: 30px; 
-        }
-        .suggestion-box {
-            background-color: #fff9db; border: 1px solid #ffec99; border-radius: 12px;
-            padding: 15px; margin-bottom: 20px; font-size: 0.9rem; color: #664d03;
-        }
-        .purpose-tag { font-size: 0.8rem; background: #e9ecef; padding: 2px 8px; border-radius: 5px; color: #495057; }
+        .card { border: none; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); }
+        .btn-next { background: var(--cbe-primary); color: white; border: none; padding: 16px; border-radius: 12px; font-weight: bold; width: 100%; margin-top: 20px; }
+        .footer-info { text-align: center; margin-top: 25px; color: #6c757d; font-size: 0.85rem; }
     </style>
 </head>
 <body>
-    <nav class="navbar navbar-dark" style="background-color: var(--cbe-primary);">
-        <div class="container-fluid">
-            <span class="navbar-brand mb-0 h1" onclick="history.back()">
-                <i class="bi bi-chevron-left"></i> SMAD 1.1 S | 診斷與目的
-            </span>
-        </div>
-    </nav>
-
     <div class="container">
-        <div class="card p-4">
-            <div id="roleSuggestion" class="suggestion-box"></div>
-
-            <form id="diagForm">
-                <div class="step-title"><i class="bi bi-geo-alt-fill"></i> Where－空間與尺度</div>
-                <select class="form-select mb-2" id="scale">
-                    <option value="urban">都市尺度 (Urban Scale)</option>
-                    <option value="building">建築尺度 (Building Scale)</option>
-                    <option value="interior" selected>室內尺度 (Interior Scale)</option>
+        <div class="card shadow">
+            <div class="cbe-brand-header">
+                <div class="h4 fw-bold">CBE studio</div>
+                <div class="small">SMAD 1.1 數位診斷系統</div>
+            </div>
+            <div class="card-body p-4 text-center">
+                <div class="mb-4">
+                    <i class="bi bi-person-bounding-box" style="font-size: 3rem; color: var(--cbe-primary);"></i>
+                    <h5 class="mt-2 fw-bold">請先選取您的身份</h5>
+                </div>
+                
+                <select class="form-select form-select-lg mb-3" id="userRole">
+                    <optgroup label="設計規劃端">
+                        <option value="architect">建築師</option>
+                        <option value="interior_designer">室內設計師</option>
+                        <option value="urban_planner">都市計畫師</option>
+                    </optgroup>
+                    <optgroup label="營建管理端">
+                        <option value="developer">建設公司</option>
+                        <option value="construction">營造公司</option>
+                        <option value="interior_fitout">室內裝修</option>
+                        <option value="management">管理單位</option>
+                    </optgroup>
+                    <optgroup label="其他">
+                        <option value="general_user">一般使用者</option>
+                    </optgroup>
                 </select>
-                <input type="text" class="form-control" id="location" placeholder="輸入具體空間名稱 (如：公設大廳)">
 
-                <div class="step-title"><i class="bi bi-search"></i> What－環境類型感知 (Situation)</div>
-                <div class="p-2 border rounded bg-light">
-                    <div class="form-check mb-2">
-                        <input class="form-check-input" type="radio" name="env_type" id="e1" value="wind">
-                        <label class="form-check-label" for="e1">風環境 (Wind Environment)</label>
-                    </div>
-                    <div class="form-check mb-2">
-                        <input class="form-check-input" type="radio" name="env_type" id="e2" value="thermal">
-                        <label class="form-check-label" for="e2">熱環境 (Thermal Environment)</label>
-                    </div>
-                    <div class="form-check">
-                        <input class="form-check-input" type="radio" name="env_type" id="e3" value="coupled" checked>
-                        <label class="form-check-label" for="e3">風環境與熱環境 (Coupled Analysis)</label>
-                    </div>
-                </div>
-
-                <div class="step-title"><i class="bi bi-target"></i> 模擬目的確認 (Simulation Purpose)</div>
-                <p class="small text-muted mb-2">請選擇模擬的核心目標：</p>
-                <div class="form-check mb-2">
-                    <input class="form-check-input" type="checkbox" id="p1" checked>
-                    <label class="form-check-label" for="p1">驗證設計方案有效性 <span class="purpose-tag">Validation</span></label>
-                </div>
-                <div class="form-check mb-2">
-                    <input class="form-check-input" type="checkbox" id="p2">
-                    <label class="form-check-label" for="p2">找出環境失效原因 <span class="purpose-tag">Diagnosis</span></label>
-                </div>
-                <div class="form-check mb-2">
-                    <input class="form-check-input" type="checkbox" id="p3">
-                    <label class="form-check-label" for="p3">輔助 AIGC 生成參數優化 <span class="purpose-tag">Optimization</span></label>
-                </div>
-                <div class="form-check mb-2">
-                    <input class="form-check-input" type="checkbox" id="p4">
-                    <label class="form-check-label" for="p4">提供法規或認證數據 <span class="purpose-tag">Certification</span></label>
-                </div>
-
-                <div class="step-title"><i class="bi bi-chat-left-dots-fill"></i> How－問題來源 (Source)</div>
-                <textarea class="form-control" id="how" rows="3" placeholder="請簡述使用行為或物理熱源狀況..."></textarea>
-
-                <button type="button" class="btn btn-submit" onclick="submitDiagnostic()">完成診斷並生成報告</button>
-            </form>
+                <button class="btn btn-next" onclick="goToNextPage()">進入診斷流程 <i class="bi bi-arrow-right"></i></button>
+            </div>
         </div>
-
-        <div class="footer-info text-center mt-4 small text-muted">
-            Developer: CBE studio | Liwei, Tsai<br>
-            <a href="https://www.cbesstudio.com/" target="_blank" style="color:var(--cbe-primary); text-decoration:none;">研究室官網</a><br>
-            逢甲大學 建築專業學院 博士班研究成果
+        <div class="footer-info">
+            <strong>Developer: CBE studio | Liwei, Tsai</strong><br>
+            © 2026 CBE STUDIO | <a href="https://www.cbesstudio.com/" target="_blank" style="text-decoration:none;">研究室官網</a>
         </div>
     </div>
-
     <script>
-        const params = new URLSearchParams(window.location.search);
-        const role = params.get('role');
-        const suggestionBox = document.getElementById('roleSuggestion');
-
-        const suggestions = {
-            'architect': '<b>【設計規劃端建議】</b><br>模擬應著重於量體對風場的引導，建議以 Validation 為主。',
-            'interior_designer': '<b>【設計規劃端建議】</b><br>關注細部隔間與通風路徑，建議進行 Coupled 耦合分析。',
-            'urban_planner': '<b>【設計規劃端建議】</b><br>應考量大尺度風速分佈，目標建議包含 Certification 數據需求。',
-            'developer': '<b>【營建管理端建議】</b><br>模擬結果可用於增加設計附加價值與舒適度認證。',
-            'construction': '<b>【營建管理端建議】</b><br>建議進行 Diagnosis 診斷，釐清現場條件與原始設計之差異。',
-            'interior_fitout': '<b>【營建管理端建議】</b><br>應記錄二次裝修對原本換氣路徑的影響，進行 Source 釐清。',
-            'management': '<b>【營建管理端建議】</b><br>重點在於節能與長期運維，模擬目的建議選擇 Optimization。',
-            'general_user': '<b>【一般使用者建議】</b><br>您的感受是模擬最真實的基礎數據，請詳細描述空間使用狀況。'
-        };
-
-        suggestionBox.innerHTML = suggestions[role] || '<b>【SMAD 提醒】</b><br>請完成 Step 1.1 的現況診斷，以利進入 Step 1.2 設定邊界條件。';
-
-        function submitDiagnostic() {
-            alert('【SMAD 1.1 S 診斷完成】\n目的確認：已記錄模擬目標。\n開發者：Liwei, Tsai\n\n系統將以此作為 Step 1.2 設定之依據。');
+        function goToNextPage() {
+            const role = document.getElementById('userRole').value;
+            window.location.href = `diag.html?role=${role}`;
         }
+        if ('serviceWorker' in navigator) { navigator.serviceWorker.register('sw.js'); }
     </script>
 </body>
 </html>
