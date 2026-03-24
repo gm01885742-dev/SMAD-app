@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SMAD 1.1 議題釐清工具</title>
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#2c3e50">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body { background-color: #f4f7f9; font-family: "Microsoft JhengHei", sans-serif; }
+        .container { max-width: 500px; margin-top: 20px; }
+        .card { border: none; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.08); }
+        .step-title { color: #2c3e50; font-weight: bold; border-left: 5px solid #3498db; padding-left: 12px; margin: 20px 0 15px 0; }
+        .btn-primary { background: linear-gradient(135deg, #2c3e50, #34495e); border: none; padding: 12px; border-radius: 10px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="card p-4">
+            <h3 class="text-center mb-4">SMAD 1.1 創新模版</h3>
+            <form id="pwaForm">
+                <div class="step-title">Who - 使用者對象</div>
+                <select class="form-select" id="who">
+                    <option value="designer">設計師 / 建築師</option>
+                    <option value="manager">建設 / 營造單位</option>
+                    <option value="user">業主 / 使用者</option>
+                </select>
+
+                <div class="step-title">Where - 空間尺度</div>
+                <select class="form-select mb-2" id="where_scale">
+                    <option value="urban">都市尺度</option>
+                    <option value="building">建築尺度</option>
+                    <option value="interior" selected>室內尺度</option>
+                </select>
+                <input type="text" class="form-control" id="where_name" placeholder="空間名稱 (如: A棟大廳)">
+
+                <div class="step-title">What - 問題感知</div>
+                <div class="form-check"><input class="form-check-input" type="checkbox" id="w1"><label class="form-check-label">熱累積/悶熱</label></div>
+                <div class="form-check"><input class="form-check-input" type="checkbox" id="w2"><label class="form-check-label">風速過高</label></div>
+                <div class="form-check"><input class="form-check-input" type="checkbox" id="w3"><label class="form-check-label">氣流死角</label></div>
+
+                <div class="step-title">How - 使用行為</div>
+                <textarea class="form-control" id="how" rows="3" placeholder="描述開窗、隔間或設備使用狀況..."></textarea>
+
+                <button type="button" class="btn btn-primary w-100 mt-4" onclick="alert('數據已紀錄，建議進入 1.2 模擬階段')">提交初步釐清報告</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('sw.js');
+        }
+    </script>
+</body>
+</html>
