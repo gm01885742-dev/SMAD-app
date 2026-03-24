@@ -28,28 +28,32 @@
 </head>
 <body>
     <div class="container">
-        <div class="card">
+        <div class="card shadow">
             <div class="cbe-brand-header">
                 <div class="h4 fw-bold">CBE studio</div>
                 <div class="small">SMAD 1.1 數位診斷系統</div>
             </div>
             <div class="card-body p-4 text-center">
                 <div class="mb-4">
-                    <i class="bi bi-person-circle" style="font-size: 3rem; color: var(--cbe-primary);"></i>
+                    <i class="bi bi-person-bounding-box" style="font-size: 3rem; color: var(--cbe-primary);"></i>
                     <h5 class="mt-2 fw-bold">請先選取您的身份</h5>
+                    <p class="text-muted small">Who - 使用者對象識別</p>
                 </div>
                 
                 <select class="form-select form-select-lg mb-3" id="userRole">
                     <optgroup label="設計規劃端">
-                        <option value="interior_designer">室內設計師</option>
                         <option value="architect">建築師</option>
-                        <option value="urban_planner">都市計劃師</option>
+                        <option value="interior_designer">室內設計師</option>
+                        <option value="urban_planner">都市計畫師</option>
                     </optgroup>
                     <optgroup label="營建管理端">
                         <option value="developer">建設公司</option>
-                        <option value="construction">營造單位</option>
-                        <option value="renovation">裝修單位</option>
+                        <option value="construction">營造公司</option>
+                        <option value="interior_fitout">室內裝修</option>
                         <option value="management">管理單位</option>
+                    </optgroup>
+                    <optgroup label="其他">
+                        <option value="general_user">一般使用者</option>
                     </optgroup>
                 </select>
 
@@ -67,7 +71,7 @@
     <script>
         function goToNextPage() {
             const role = document.getElementById('userRole').value;
-            // 將選取的身份帶到下一頁 diag.html
+            // 跳轉至 diag.html 並攜帶身份參數
             window.location.href = `diag.html?role=${role}`;
         }
         if ('serviceWorker' in navigator) { 
