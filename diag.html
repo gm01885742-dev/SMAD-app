@@ -3,71 +3,76 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SMAD 1.1 診斷中</title>
+    <title>CBE studio | SMAD 1.1 入口</title>
+    <link rel="manifest" href="manifest.json">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
     <style>
         :root { --cbe-primary: #1a2a6c; --cbe-accent: #d4a017; }
-        body { background-color: #f8f9fa; font-family: "Microsoft JhengHei", sans-serif; }
-        .container { max-width: 500px; margin-top: 20px; padding-bottom: 50px; }
-        .step-title { color: var(--cbe-primary); font-weight: bold; border-left: 5px solid var(--cbe-accent); padding-left: 12px; margin: 25px 0 12px 0; }
-        .btn-submit { background: var(--cbe-primary); color: white; border: none; padding: 16px; border-radius: 12px; font-weight: bold; width: 100%; margin-top: 30px; }
+        body { background-color: #f8f9fa; font-family: "Microsoft JhengHei", sans-serif; display: flex; align-items: center; min-height: 100vh; }
+        .container { max-width: 450px; }
+        .cbe-brand-header {
+            background: linear-gradient(135deg, var(--cbe-primary), #2a4858);
+            color: white; padding: 30px 20px; border-radius: 20px 20px 0 0; text-align: center;
+        }
+        .card { border: none; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); }
+        .btn-next { 
+            background: var(--cbe-primary); color: white; border: none; padding: 16px; 
+            border-radius: 12px; font-weight: bold; width: 100%; margin-top: 20px;
+            transition: 0.3s;
+        }
+        .btn-next:hover { background: #0d1740; transform: translateY(-2px); }
+        .footer-info { text-align: center; margin-top: 25px; color: #6c757d; font-size: 0.85rem; line-height: 1.6; }
+        .developer-tag { color: var(--cbe-primary); font-weight: bold; }
     </style>
 </head>
 <body>
-    <nav class="navbar navbar-dark bg-dark">
-        <div class="container-fluid">
-            <span class="navbar-brand mb-0 h1" onclick="history.back()"><i class="bi bi-chevron-left"></i> SMAD 1.1 S</span>
-        </div>
-    </nav>
-
     <div class="container">
-        <div class="card shadow-sm border-0 p-4">
-            <div id="welcomeMessage" class="alert alert-info small">正在載入診斷模版...</div>
-
-            <div class="step-title">Where－空間與尺度</div>
-            <select class="form-select mb-2" id="scale">
-                <option value="urban">都市尺度</option>
-                <option value="building">建築尺度</option>
-                <option value="interior" selected>室內尺度</option>
-            </select>
-            <input type="text" class="form-control" placeholder="輸入具體空間名稱">
-
-            <div class="step-title">What－問題感知 (風/熱環境)</div>
-            <div class="form-check mb-2">
-                <input class="form-check-input" type="radio" name="env" id="e1">
-                <label class="form-check-label" for="e1">風環境 (Wind)</label>
+        <div class="card">
+            <div class="cbe-brand-header">
+                <div class="h4 fw-bold">CBE studio</div>
+                <div class="small">SMAD 1.1 數位診斷系統</div>
             </div>
-            <div class="form-check mb-2">
-                <input class="form-check-input" type="radio" name="env" id="e2">
-                <label class="form-check-label" for="e2">熱環境 (Thermal)</label>
+            <div class="card-body p-4 text-center">
+                <div class="mb-4">
+                    <i class="bi bi-person-circle" style="font-size: 3rem; color: var(--cbe-primary);"></i>
+                    <h5 class="mt-2 fw-bold">請先選取您的身份</h5>
+                </div>
+                
+                <select class="form-select form-select-lg mb-3" id="userRole">
+                    <optgroup label="設計規劃端">
+                        <option value="interior_designer">室內設計師</option>
+                        <option value="architect">建築師</option>
+                        <option value="urban_planner">都市計劃師</option>
+                    </optgroup>
+                    <optgroup label="營建管理端">
+                        <option value="developer">建設公司</option>
+                        <option value="construction">營造單位</option>
+                        <option value="renovation">裝修單位</option>
+                        <option value="management">管理單位</option>
+                    </optgroup>
+                </select>
+
+                <button class="btn btn-next" onclick="goToNextPage()">進入診斷流程 <i class="bi bi-arrow-right"></i></button>
             </div>
-            <div class="form-check mb-3">
-                <input class="form-check-input" type="radio" name="env" id="e3" checked>
-                <label class="form-check-label" for="e3">風環境與熱環境 (Coupled)</label>
-            </div>
+        </div>
 
-            <hr>
-            <div class="form-check"><input class="form-check-input" type="checkbox"><label class="form-check-label">熱累積 / 悶熱</label></div>
-            <div class="form-check"><input class="form-check-input" type="checkbox"><label class="form-check-label">風切現象 / 局部強風</label></div>
-            <div class="form-check"><input class="form-check-input" type="checkbox"><label class="form-check-label">氣流死角 / 換氣不足</label></div>
-
-            <div class="step-title">How－使用行為 (Source)</div>
-            <textarea class="form-control" rows="3" placeholder="描述開窗習慣或問題來源..."></textarea>
-
-            <button class="btn btn-submit" onclick="alert('診斷報告已生成！\nDeveloper: Liwei, Tsai')">提交診斷報告</button>
+        <div class="footer-info">
+            <div class="developer-tag">Developer: CBE studio | Liwei, Tsai</div>
+            © 2026 CBE STUDIO | <a href="https://www.cbesstudio.com/" target="_blank" style="color:var(--cbe-primary); text-decoration:none; font-weight:bold;">研究室官網</a><br>
+            <small>逢甲大學 建築專業學院 博士班研究成果</small>
         </div>
     </div>
 
     <script>
-        // 取得網址中的角色資訊
-        const params = new URLSearchParams(window.location.search);
-        const role = params.get('role');
-        const msgBox = document.getElementById('welcomeMessage');
-        
-        if(role === 'designer') msgBox.innerText = "針對【設計/建築師】優化的診斷模版";
-        else if(role === 'manager') msgBox.innerText = "針對【營建/管理端】優化的診斷模版";
-        else msgBox.innerText = "SMAD 1.1 標準診斷模版";
+        function goToNextPage() {
+            const role = document.getElementById('userRole').value;
+            // 將選取的身份帶到下一頁 diag.html
+            window.location.href = `diag.html?role=${role}`;
+        }
+        if ('serviceWorker' in navigator) { 
+            navigator.serviceWorker.register('sw.js'); 
+        }
     </script>
 </body>
 </html>
