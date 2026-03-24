@@ -19,7 +19,11 @@
         .btn-next { 
             background: var(--cbe-primary); color: white; border: none; padding: 16px; 
             border-radius: 12px; font-weight: bold; width: 100%; margin-top: 20px;
+            transition: 0.3s;
         }
+        .btn-next:hover { background: #0d1740; transform: translateY(-2px); }
+        .footer-info { text-align: center; margin-top: 25px; color: #6c757d; font-size: 0.85rem; line-height: 1.6; }
+        .developer-tag { color: var(--cbe-primary); font-weight: bold; }
     </style>
 </head>
 <body>
@@ -37,28 +41,38 @@
                 
                 <select class="form-select form-select-lg mb-3" id="userRole">
                     <optgroup label="設計規劃端">
-                        <option value="designer">室內設計師 / 建築師</option>
-                        <option value="planner">都市計劃師</option>
+                        <option value="interior_designer">室內設計師</option>
+                        <option value="architect">建築師</option>
+                        <option value="urban_planner">都市計劃師</option>
                     </optgroup>
                     <optgroup label="營建管理端">
-                        <option value="manager">建設公司 / 營造單位</option>
-                        <option value="admin">裝修 / 管理單位</option>
+                        <option value="developer">建設公司</option>
+                        <option value="construction">營造單位</option>
+                        <option value="renovation">裝修單位</option>
+                        <option value="management">管理單位</option>
                     </optgroup>
                 </select>
 
                 <button class="btn btn-next" onclick="goToNextPage()">進入診斷流程 <i class="bi bi-arrow-right"></i></button>
             </div>
         </div>
-        <div class="text-center mt-4 small text-muted">Developer: Liwei, Tsai</div>
+
+        <div class="footer-info">
+            <div class="developer-tag">Developer: CBE studio | Liwei, Tsai</div>
+            © 2026 CBE STUDIO | <a href="https://www.cbesstudio.com/" target="_blank" style="color:var(--cbe-primary); text-decoration:none; font-weight:bold;">研究室官網</a><br>
+            <small>逢甲大學 建築專業學院 博士班研究成果</small>
+        </div>
     </div>
 
     <script>
         function goToNextPage() {
             const role = document.getElementById('userRole').value;
-            // 將選取的身份帶到下一頁的網址中
+            // 將選取的身份帶到下一頁 diag.html
             window.location.href = `diag.html?role=${role}`;
         }
-        if ('serviceWorker' in navigator) { navigator.serviceWorker.register('sw.js'); }
+        if ('serviceWorker' in navigator) { 
+            navigator.serviceWorker.register('sw.js'); 
+        }
     </script>
 </body>
 </html>
