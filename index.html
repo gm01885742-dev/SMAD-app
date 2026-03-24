@@ -3,52 +3,130 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SMAD 1.1 議題釐清工具</title>
+    <title>CBE studio 風環境模擬需求診斷</title>
     <link rel="manifest" href="manifest.json">
-    <meta name="theme-color" content="#2c3e50">
+    <meta name="theme-color" content="#1a2a6c">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
     <style>
-        body { background-color: #f4f7f9; font-family: "Microsoft JhengHei", sans-serif; }
-        .container { max-width: 500px; margin-top: 20px; }
-        .card { border: none; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.08); }
-        .step-title { color: #2c3e50; font-weight: bold; border-left: 5px solid #3498db; padding-left: 12px; margin: 20px 0 15px 0; }
-        .btn-primary { background: linear-gradient(135deg, #2c3e50, #34495e); border: none; padding: 12px; border-radius: 10px; }
+        :root {
+            --cbe-primary: #1a2a6c;
+            --cbe-accent: #d4a017;
+        }
+        body { background-color: #f8f9fa; font-family: "Microsoft JhengHei", sans-serif; }
+        .container { max-width: 500px; margin-top: 30px; padding-bottom: 50px; }
+        
+        .cbe-brand-header {
+            background: linear-gradient(135deg, var(--cbe-primary), #2a4858);
+            color: white;
+            padding: 30px 20px;
+            border-radius: 20px 20px 0 0;
+            text-align: center;
+        }
+        .studio-name { font-weight: 800; letter-spacing: 3px; font-size: 1.8rem; margin-bottom: 5px; }
+        .studio-sub { font-size: 0.85rem; opacity: 0.9; }
+        
+        .card { border: none; border-radius: 0 0 20px 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.08); }
+        .card-body { padding: 35px 25px; }
+        
+        .step-title { 
+            color: var(--cbe-primary); 
+            font-weight: bold; 
+            border-left: 5px solid var(--cbe-accent); 
+            padding-left: 12px; 
+            margin: 25px 0 15px 0; 
+            font-size: 1.1rem;
+        }
+        
+        .form-select, .form-control { border-radius: 10px; padding: 12px; }
+
+        .btn-submit { 
+            background: var(--cbe-primary); 
+            color: white;
+            border: none; 
+            padding: 16px; 
+            border-radius: 12px; 
+            font-weight: bold;
+            transition: 0.3s;
+        }
+        .btn-submit:hover { background: #0d1740; transform: translateY(-2px); color: white; }
+        
+        .footer-info { text-align: center; margin-top: 25px; color: #6c757d; font-size: 0.85rem; }
+        .footer-info a { color: var(--cbe-primary); text-decoration: none; font-weight: bold; }
     </style>
 </head>
 <body>
     <div class="container">
-        <div class="card p-4">
-            <h3 class="text-center mb-4">SMAD 1.1 創新模版</h3>
-            <form id="pwaForm">
-                <div class="step-title">Who - 使用者對象</div>
-                <select class="form-select" id="who">
-                    <option value="designer">設計師 / 建築師</option>
-                    <option value="manager">建設 / 營造單位</option>
-                    <option value="user">業主 / 使用者</option>
-                </select>
+        <div class="card">
+            <div class="cbe-brand-header">
+                <div class="studio-name">CBE studio</div>
+                <div class="studio-sub">氣候與建成環境研究室 | 逢甲大學</div>
+            </div>
+            
+            <div class="card-body">
+                <h4 class="text-center fw-bold mb-1">風環境模擬需求診斷</h4>
+                <p class="text-muted text-center small mb-4">SMAD 1.1 設計議題釐清模板</p>
+                
+                <form id="pwaForm">
+                    <div class="step-title"><i class="bi bi-people-fill"></i> Who - 使用者對象</div>
+                    <select class="form-select" id="who">
+                        <optgroup label="設計與規劃端">
+                            <option value="interior_designer">室內設計師</option>
+                            <option value="architect">建築師</option>
+                            <option value="urban_planner">都市計劃師</option>
+                        </optgroup>
+                        <optgroup label="營建與管理端">
+                            <option value="developer">建設公司</option>
+                            <option value="construction">營造單位</option>
+                            <option value="renovation">裝修單位</option>
+                            <option value="management">管理單位</option>
+                        </optgroup>
+                        <optgroup label="其他">
+                            <option value="expert">面向使用者 / 專家</option>
+                        </optgroup>
+                    </select>
 
-                <div class="step-title">Where - 空間尺度</div>
-                <select class="form-select mb-2" id="where_scale">
-                    <option value="urban">都市尺度</option>
-                    <option value="building">建築尺度</option>
-                    <option value="interior" selected>室內尺度</option>
-                </select>
-                <input type="text" class="form-control" id="where_name" placeholder="空間名稱 (如: A棟大廳)">
+                    <div class="step-title"><i class="bi bi-geo-alt-fill"></i> Where - 空間與尺度</div>
+                    <select class="form-select mb-3" id="scale">
+                        <option value="urban">都市尺度 (Urban)</option>
+                        <option value="building">建築尺度 (Building)</option>
+                        <option value="interior" selected>室內尺度 (Interior)</option>
+                    </select>
+                    <input type="text" class="form-control" id="location" placeholder="輸入具體空間 (如：公設空間、透天住宅)">
 
-                <div class="step-title">What - 問題感知</div>
-                <div class="form-check"><input class="form-check-input" type="checkbox" id="w1"><label class="form-check-label">熱累積/悶熱</label></div>
-                <div class="form-check"><input class="form-check-input" type="checkbox" id="w2"><label class="form-check-label">風速過高</label></div>
-                <div class="form-check"><input class="form-check-input" type="checkbox" id="w3"><label class="form-check-label">氣流死角</label></div>
+                    <div class="step-title"><i class="bi bi-search"></i> What - 問題感知</div>
+                    <div class="form-check mb-2">
+                        <input class="form-check-input" type="checkbox" id="q1">
+                        <label class="form-check-label">熱累積 / 局部悶熱不適感</label>
+                    </div>
+                    <div class="form-check mb-2">
+                        <input class="form-check-input" type="checkbox" id="q2">
+                        <label class="form-check-label">風切現象 / 局部風速過高</label>
+                    </div>
+                    <div class="form-check mb-2">
+                        <input class="form-check-input" type="checkbox" id="q3">
+                        <label class="form-check-label">氣流死角 / 換氣效率不足</label>
+                    </div>
 
-                <div class="step-title">How - 使用行為</div>
-                <textarea class="form-control" id="how" rows="3" placeholder="描述開窗、隔間或設備使用狀況..."></textarea>
+                    <div class="step-title"><i class="bi bi-gear-wide-connected"></i> How - 使用行為</div>
+                    <textarea class="form-control" id="how" rows="3" placeholder="簡述開窗習慣、隔間配置或設備使用狀況..."></textarea>
 
-                <button type="button" class="btn btn-primary w-100 mt-4" onclick="alert('數據已紀錄，建議進入 1.2 模擬階段')">提交初步釐清報告</button>
-            </form>
+                    <button type="button" class="btn btn-submit w-100" onclick="submitDiagnostic()">開始診斷報告</button>
+                </form>
+            </div>
+        </div>
+        
+        <div class="footer-info">
+            © 2026 CBE STUDIO | <a href="https://www.cbesstudio.com/" target="_blank">研究室官網</a>
         </div>
     </div>
 
     <script>
+        function submitDiagnostic() {
+            const msg = "【CBE 診斷完成】\n數據已記錄至 SMAD 系統。建議根據診斷結果進入 Step 1.2 進行邊界條件設定。";
+            alert(msg);
+        }
+
         if ('serviceWorker' in navigator) {
             navigator.serviceWorker.register('sw.js');
         }
