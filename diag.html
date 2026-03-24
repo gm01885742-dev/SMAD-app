@@ -3,33 +3,148 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SMAD 1.1 S | Step 1.2</title>
+    <title>SMAD 1.1 S | Step 1.2 基地資訊收集</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
     <style>
         :root { --cbe-primary: #1a2a6c; --cbe-accent: #d4a017; }
-        body { background-color: #f8f9fa; font-family: "Microsoft JhengHei", sans-serif; padding-bottom: 50px; }
+        body { background-color: #f8f9fa; font-family: "Microsoft JhengHei", sans-serif; padding-bottom: 60px; }
         .container { max-width: 500px; margin-top: 20px; }
-        .step-title { color: var(--cbe-primary); font-weight: bold; border-left: 5px solid var(--cbe-accent); padding-left: 12px; margin: 25px 0 12px 0; }
-        .btn-submit { background: var(--cbe-primary); color: white; border: none; padding: 16px; border-radius: 12px; width: 100%; margin-top: 30px; }
+        .card { border: none; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.08); overflow: hidden; }
+        .step-header { background: var(--cbe-primary); color: white; padding: 15px; text-align: center; font-weight: bold; }
+        .step-title { color: var(--cbe-primary); font-weight: bold; border-left: 5px solid var(--cbe-accent); padding-left: 12px; margin: 25px 0 10px 0; font-size: 1rem; }
+        .form-label { font-weight: bold; color: #495057; font-size: 0.9rem; margin-top: 10px; }
+        .btn-next { background: var(--cbe-primary); color: white; border: none; padding: 16px; border-radius: 12px; font-weight: bold; width: 100%; margin-top: 30px; transition: 0.3s; }
+        .preview-container { position: relative; width: 100%; margin-top: 15px; display: none; }
+        #imgPreview { width: 100%; border-radius: 12px; border: 2px solid #dee2e6; }
+        .upload-area { border: 2px dashed #ced4da; border-radius: 12px; padding: 20px; text-align: center; cursor: pointer; background: #fff; transition: 0.2s; }
+        .upload-area:hover { border-color: var(--cbe-primary); background: #f1f3f9; }
     </style>
 </head>
 <body>
-    <nav class="navbar navbar-dark" style="background-color: var(--cbe-primary);"><div class="container-fluid"><span class="navbar-brand mb-0 h1">Step 1.2 問題來源整理</span></div></nav>
+    <nav class="navbar navbar-dark" style="background-color: var(--cbe-primary);">
+        <div class="container-fluid">
+            <span class="navbar-brand mb-0 h1" onclick="history.back()"><i class="bi bi-chevron-left"></i> Step 1.2 基地診斷</span>
+        </div>
+    </nav>
+
     <div class="container">
-        <div class="card p-4 shadow-sm" style="border-radius: 20px; border:none;">
-            <div class="step-title">問題來源描述 (Source)</div>
-            <p class="small text-muted">請詳細描述該空間發生的環境問題：</p>
-            <textarea class="form-control" id="sourceDesc" rows="6" placeholder="例如：夏季午後西曬嚴重、窗戶開啟率低..."></textarea>
-            <button type="button" class="btn btn-submit" onclick="goToDataPage()">進入空間資料收集</button>
+        <div class="card shadow-sm">
+            <div class="step-header">現地踏勘與物理環境紀錄</div>
+            <div class="card-body p-4">
+                <form id="siteForm">
+                    <div class="step-title"><i class="bi bi-geo-alt-fill"></i> 1. 基地位置與定位</div>
+                    <label class="form-label">詳細地址 / 建案名稱</label>
+                    <input type="text" id="address" class="form-control" placeholder="輸入地址以利獲取氣象站資料">
+
+                    <label class="form-label">空間坐向 (主要採光/通風面)</label>
+                    <select class="form-select" id="orientation">
+                        <option value="坐北朝南">坐北朝南 (避北風)</option>
+                        <option value="坐南朝北">坐南朝北</option>
+                        <option value="坐東朝西">坐東朝西 (西曬關注)</option>
+                        <option value="坐西朝東">坐西朝東</option>
+                        <option value="坐東北朝西南">坐東北朝西南</option>
+                        <option value="坐西北朝東南">坐西北朝東南</option>
+                        <option value="坐東南朝西北">坐東南朝西北</option>
+                        <option value="坐西南朝東北">坐西南朝東北</option>
+                    </select>
+
+                    <div class="step-title"><i class="bi bi-exclamation-triangle-fill"></i> 2. 環境問題診斷</div>
+                    <label class="form-label">問題發生頻率</label>
+                    <div class="d-flex gap-2 mb-2">
+                        <input type="radio" class="btn-check" name="freq" id="f1" value="每天" checked>
+                        <label class="btn btn-outline-secondary btn-sm w-100" for="f1">每天</label>
+                        <input type="radio" class="btn-check" name="freq" id="f2" value="季節性">
+                        <label class="btn btn-outline-secondary btn-sm w-100" for="f2">季節性</label>
+                        <input type="radio" class="btn-check" name="freq" id="f3" value="偶發">
+                        <label class="btn btn-outline-secondary btn-sm w-100" for="f3">偶發</label>
+                    </div>
+
+                    <label class="form-label">詳細現況描述 (Source)</label>
+                    <textarea class="form-control" id="sourceDesc" rows="3" placeholder="請描述風速過大、悶熱、或空氣不流通之具體情境..."></textarea>
+
+                    <div class="step-title"><i class="bi bi-camera-fill"></i> 3. 現場影像與圖資</div>
+                    <div class="upload-area" onclick="document.getElementById('fileInput').click()">
+                        <i class="bi bi-cloud-arrow-up fs-1 text-muted"></i>
+                        <p class="mb-0 mt-2 small fw-bold">點擊拍照或上傳平面圖資</p>
+                        <input type="file" id="fileInput" hidden accept="image/*" capture="environment">
+                    </div>
+                    
+                    <div class="preview-container" id="previewContainer">
+                        <img id="imgPreview" src="" alt="預覽">
+                        <div class="text-center mt-2">
+                            <button type="button" class="btn btn-sm btn-danger" onclick="removeImg()">刪除重拍</button>
+                        </div>
+                    </div>
+
+                    <button type="button" class="btn btn-next" onclick="saveAndNext()">
+                        進入最終存檔 <i class="bi bi-arrow-right-circle-fill ms-1"></i>
+                    </button>
+                </form>
+            </div>
+        </div>
+        
+        <div class="text-center mt-4">
+            <a href="https://www.cbesstudio.com/" target="_blank" style="text-decoration:none; color:var(--cbe-primary); font-size: 0.85rem; font-weight:bold;">
+                CBE studio 研究室網址
+            </a>
         </div>
     </div>
+
     <script>
-        function goToDataPage() {
-            const currentURL = new URLSearchParams(window.location.search);
-            const source = document.getElementById('sourceDesc').value || "無描述";
-            // 附加第二頁的描述，傳給第三頁
-            currentURL.append('source', source);
-            window.location.href = `data.html?` + currentURL.toString();
+        const fileInput = document.getElementById('fileInput');
+        const previewContainer = document.getElementById('previewContainer');
+        const imgPreview = document.getElementById('imgPreview');
+        let base64Image = "";
+
+        // 處理圖片上傳與縮小 (防止 Base64 過大導致上傳失敗)
+        fileInput.addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = function(event) {
+                const img = new Image();
+                img.onload = function() {
+                    const canvas = document.createElement('canvas');
+                    const MAX_WIDTH = 600; // 限制寬度在 600px 以內縮小體積
+                    const scaleSize = MAX_WIDTH / img.width;
+                    canvas.width = MAX_WIDTH;
+                    canvas.height = img.height * scaleSize;
+                    const ctx = canvas.getContext('2d');
+                    ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+                    base64Image = canvas.toDataURL('image/jpeg', 0.7); // 壓縮品質 0.7
+                    imgPreview.src = base64Image;
+                    previewContainer.style.display = "block";
+                };
+                img.src = event.target.result;
+            };
+            reader.readAsDataURL(file);
+        });
+
+        function removeImg() {
+            fileInput.value = "";
+            base64Image = "";
+            previewContainer.style.display = "none";
+        }
+
+        function saveAndNext() {
+            const params = new URLSearchParams(window.location.search);
+            const address = document.getElementById('address').value;
+            const orientation = document.getElementById('orientation').value;
+            const source = document.getElementById('sourceDesc').value;
+            const freq = document.querySelector('input[name="freq"]:checked').value;
+
+            // 存入 URL 傳遞
+            params.append('address', address || "未填寫");
+            params.append('orientation', orientation);
+            params.append('source', source || "未填寫");
+            params.append('freq', freq);
+
+            // 圖片太長，透過 localStorage 傳遞
+            localStorage.setItem('temp_image', base64Image);
+
+            window.location.href = `data.html?` + params.toString();
         }
     </script>
 </body>
